@@ -5,9 +5,9 @@ services:
     container_name: nacos-standalone-mysql
     env_file:
       - ./env/nacos-standlone-mysql.env
-    volumes:
-      - ./standalone-logs/:/home/nacos/logs
-      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    # volumes:
+    #   - ./standalone-logs/:/home/nacos/logs
+    #   - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
     ports:
       - "8848:8848"
       - "9848:9848"
@@ -22,8 +22,8 @@ services:
     image: nacos/nacos-mysql:8.0.16
     env_file:
       - ./env/mysql.env
-    volumes:
-      - ./mysql:/var/lib/mysql
+    # volumes:
+    #   - ./mysql:/var/lib/mysql
     ports:
       - "13306:3306"
     restart: on-failure
