@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    container_name: java-mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=${MYSQL_CHARSET} --collation-server=${MYSQL_COLLATION}
+    env_file:
+      - ./mysql.env
+    ports:
+      - "33306:3306"
+    volumes:
+      - java-mysql:/var/lib/mysql
+
+  redis:
+    image: redis:${REDIS_VERSION}
+    container_name: java-redis
+    command: redis-server --save 20 1 --loglevel verbose --requirepass ${REDIS_PASSWORD}
+    restart: on-failure
+    ports:
+      - '36379:6379'
+    volumes: 
+      - java-redis:/data
+
+  rabbitmq:
+    image: rabbitmq:${RABBITMQ_VERSION}
+    container_name: java-rabbitmq
+    restart: on-failure
+    env_file:
+      - ./rabbitmq.env
+    ports:
+      - '35672:5672'
+      - '45672:15672'
+    volumes: 
+      - java-rabbitmq:/var/lib/rabbitmq
+
+volumes:
+  java-redis:
+    driver: local
+    name: java-redis
+  java-rabbitmq:
+    driver: local
+    name: java-rabbitmq
+  java-mysql:
+    driver: local
+    name: java-mysql
+
+networks:
+  default:
+    name: java-service
+    driver: bridge
